@@ -14,4 +14,4 @@ CREATE TABLE `tb_post` (
     `modified_date` datetime               DEFAULT NULL COMMENT '최종 수정일시',
     PRIMARY KEY (`id`)
 ) COMMENT '게시글';
-출처: https://congsong.tistory.com/15 [Let's develop:티스토리]
+

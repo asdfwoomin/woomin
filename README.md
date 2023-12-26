@@ -1,6 +1,8 @@
 
 스프링부트로 게시판 만들기 (2023.12.18~진행중)
 
+![캡처](https://github.com/asdfwoomin/woomin/assets/154343478/d2dffb55-31b5-4d04-b385-a3110cb57974)
+
 
 1. src/main/java 디렉터리
 스프링 레거시와 마찬가지로 클래스, 인터페이스 등 Java 관련 파일이 위치하는 디렉터리입니다.

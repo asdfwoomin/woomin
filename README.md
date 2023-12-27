@@ -689,9 +689,14 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
 8-1-1. postMapper
 @Autowired를 이용해서 스프링 컨테이너에 등록된 PostMapper 빈(Bean)을 클래스에 주입합니다.
  
- 
+
+
+
+ 
 8-1-2. save( )
 게시글을 생성하는 메서드입니다. PostRequest 객체를 생성하고, set( ) 메서드를 이용해 값을 세팅한 후 PostMapper의 save( )를 호출합니다. 메서드가 호출되면 PostMapper.xml의 save 쿼리가 실행되며, #{ 변수명 } 표현식을 통해 PostRequest 객체의 멤버 변수에 접근하게 됩니다.
+
+
 
 
 8-2. findById( ) 테스트하기

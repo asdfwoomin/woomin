@@ -65,6 +65,26 @@
                                             게시판 mariaDB 연동하기
 
 
+1. 데이터 소스(DataSource) 설정하기
+데이터 소스는 DB와의 커넥션을 관리해 주는 인터페이스입니다.
+ 
+데이터 소스 설정은 대표적으로 두 가지 방법을 이용할 수 있습니다.
+
+     
+   1-1. application.properties에 DB 정보를 선언해 두고, 설정(Configuration) 파일에서 참조하는 방법
+     
+   1-2. 설정(Configuration) 파일에서 DB 정보를 직접 입력하는 방법
+
+ 
+이 중 첫 번째 방법을 이용해 데이터 소스 빈(Bean)을 구성합니다. 우선, src/main/resources 디렉터리의 application.properties에 코드작성
+
+
+spring.datasource.hikari.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+spring.datasource.hikari.jdbc-url=jdbc:log4jdbc:mariadb://localhost:3306/board?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+spring.datasource.hikari.username=root
+spring.datasource.hikari.password=root
+spring.datasource.hikari.connection-test-query=SELECT NOW() FROM dual
+
 
 1-1) 테이블 생성 스크립트 실행하기
 

@@ -439,6 +439,8 @@ Mapper에는 @Mapper 어노테이션을 필수적으로 선언해 주어야 하�
 
 
 5. mappers 폴더와 XML Mapper 추가하기
+
+   
  src/main/resources에 mappers 폴더를 추가하고, 그 안에 PostMapper.xml을 추가합니다.
  소스는 다음과 같습니다.
 
@@ -539,7 +541,6 @@ MyBatis는 <sql> 태그와 <include> 태그를 이용해서 공통으로 사용�
 각각의 쿼리에 전체 칼럼을 선언해 줘도 되지만, 해당 태그들을 이용하면 코드 라인을 줄일 수 있습니다. 두 태그의 포인트는 중복 제거이며, 동일한 XML Mapper뿐만 아니라, 다른 XML Mapper에 선언된 SQL 조각도 인클루드(Include) 할 수 있습니다.
 
  
- 
 5-3. parameterType
 SQL 쿼리 실행에 필요한 파라미터의 타입을 의미합니다. 단일(하나의) 파라미터가 아닌 경우에는 일반적으로 객체를 전달받아 쿼리를 실행합니다.
  
@@ -552,6 +553,89 @@ SQL 쿼리의 실행 결과를 매핑할 결과 타입을 의미합니다. Mappe
  
 5-5. #{ } 표현식
 MyBatis는 #{ 변수명 } 표현식을 이용해서 전달받은 파라미터를 기준으로 쿼리를 실행합니다.
+
+6. SELECT 칼럼과 멤버 변수 매핑(바인딩)하기
+
+   
+MyBatis에서 SELECT 한 결괏값은 응답(Response) 클래스의 멤버 변수와 매핑되어야 합니다. 그러나 DB에서 테이블의 칼럼명은 언더스코어(_)로 연결된 스네이크 케이스를 사용하며, 자바에서 변수명은 소문자로 시작하고, 구분되는 단어의 앞 글자만 대문자로 처리하는 카멜 케이스를 사용합니다.
+이럴때 application.properties에 다음의 설정을 추가하면 됩니다.
+
+      
+      mybatis.configuration.map-underscore-to-camel-case=true
+
+7. DatabaseConfig 클래스 수정하기
+스프링이 properties에서 MyBatis 설정을 읽을 수 있도록 빈(Bean)을 선언해 주어야 합니다.
+DatabaseConfig 소스는 다음과 같습니다.
+
+
+
+         package com.study.config;
+
+         import com.zaxxer.hikari.HikariConfig;
+   
+         import com.zaxxer.hikari.HikariDataSource;
+   
+         import org.apache.ibatis.session.SqlSessionFactory;
+   
+         import org.mybatis.spring.SqlSessionFactoryBean;
+   
+         import org.mybatis.spring.SqlSessionTemplate;
+   
+         import org.springframework.beans.factory.annotation.Autowired;
+   
+         import org.springframework.boot.context.properties.ConfigurationProperties;
+   
+         import org.springframework.context.ApplicationContext;
+   
+         import org.springframework.context.annotation.Bean;
+   
+         import org.springframework.context.annotation.Configuration;
+   
+         import org.springframework.context.annotation.PropertySource;
+
+         import javax.sql.DataSource;
+
+         @Configuration
+         @PropertySource("classpath:/application.properties")
+         public class DatabaseConfig {
+
+        @Autowired
+        private ApplicationContext context;
+
+        @Bean
+        @ConfigurationProperties(prefix = "spring.datasource.hikari")
+        public HikariConfig hikariConfig() {
+            return new HikariConfig();
+        }
+
+        @Bean
+        public DataSource dataSource() {
+            return new HikariDataSource(hikariConfig());
+        }
+
+        @Bean
+        public SqlSessionFactory sqlSessionFactory() throws Exception {
+            SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+            factoryBean.setDataSource(dataSource());
+            factoryBean.setMapperLocations(context.getResources("classpath:/mappers/**/*Mapper.xml"));
+            factoryBean.setConfiguration(mybatisConfig());
+            return factoryBean.getObject();
+        }
+
+        @Bean
+        public SqlSessionTemplate sqlSession() throws Exception {
+            return new SqlSessionTemplate(sqlSessionFactory());
+        }
+
+        @Bean
+        @ConfigurationProperties(prefix = "mybatis.configuration")
+        public org.apache.ibatis.session.Configuration mybatisConfig() {
+            return new org.apache.ibatis.session.Configuration();
+        }
+
+         }
+
+
 
 
 </details>   

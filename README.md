@@ -14,11 +14,12 @@
 
 
   
+<p>$\bf{\large{\color{#6580DD}1. src/main/java 디렉터리}}$</p>
 
-1. src/main/java 디렉터리
 스프링 레거시와 마찬가지로 클래스, 인터페이스 등 Java 관련 파일이 위치하는 디렉터리입니다.
 
-2. BoardApplication 클래스
+<p>$\bf{\large{\color{#6580DD}2. BoardApplication 클래스}}$</p>
+
 이전 글에서 생성한 Board 프로젝트의 com.study 패키지에는 우리가 생성하지 않은 BoardApplication 클래스가 포함되어 있습니다.  main( ) 메서드는 SpringApplication.run( )을 호출해서 웹 애플리케이션을 실행하는 역할을 합니다.
  다음은 클래스 레벨에 선언된 @SpringBootAplication 어노테이션입니다. 해당 어노테이션은 다음의 세 가지 어노테이션으로 구성되어 있습니다.
 
@@ -31,7 +32,8 @@
         2-3. @Configuration
         해당 어노테이션이 선언된 클래스는 Java 기반의 설정 파일로 인식됩니다. 스프링 4 버전부터 Java 기반의 설정이 가능하게 되었으며, XML 설정에 큰 시간을 소모하지 않아도 됩니다.
 
-3. src/main/resources 디렉터리
+<p>$\bf{\large{\color{#6580DD}3. src/main/resources 디렉터리}}$</p>
+
 스프링 레거시는 프로젝트가 생성되었을 때 해당 디렉터리에 log4.xml 파일만  생성되었습니다. 스프링 부트는 templates 폴더, static 폴더, application.properties 파일이 기본적으로 생성됩니다.
 
         3-1. templates
@@ -44,14 +46,16 @@
         해당 파일은 웹 애플리케이션을 실행하면서 자동으로 로딩되는 파일입니다. 예를 들어, 부트에 내장된 톰캣의 포트 번호, 콘텍스트 패스(Context Path) 설정이나, 데이터베이스 관련 정보 등 애플리케이션에서 사용하는 여러가지 설정을 해당 파일에 Key - Value 형식으로 선언해서 사용할 수 있습니다.선언한 속성은 일반적으로 설정(Configuration) 파일에서 사용합니다.
 
 
-4. src/test/java 디렉터리
+<p>$\bf{\large{\color{#6580DD}4. src/test/java 디렉터리}}$</p>
+
 해당 디렉터리의 com.study 패키지에는 BoardApplicationTests 클래스가 생성되어 있습니다. 해당 클래스를 이용해서 개발 단계별로 단위 테스트를 진행하게 되며, 스프링 레거시와는 달리 복잡한 설정 없이 곧바로 테스트가 가능합니다.
- 
-5. build.gradle
+
+<p>$\bf{\large{\color{#6580DD}5. build.gradle}}$</p> 
 프로젝트를 생성하면서 프로젝트의 빌드 도구를 그레이들(Gradle)로 선택했습니다. 기존의 스프링은 pom.xml에 dependency를 추가해서 라이브러리를 관리하는 방식의 메이븐(Maven)을 이용했었는데 최근에는 메이븐 보다 그레이들을 선호하는 추세라고 합니다. 메이븐은 하나의 라이브러리를 추가하려면 평균적으로 네 줄 이상의 코드를 작성해야 하지만, 그레이들은단 한 줄의 코드로 라이브러리를 추가할 수 있습니다.
  프로젝트에 포함된 모든 라이브러리는 IDE의 External Libraries에서 확인할 수 있습니다.
  
-6. MVC 패턴
+<p>$\bf{\large{\color{#6580DD}6. MVC 패턴}}$</p> 
+
 기존의 스프링과 마찬가지로 MVC 패턴으로 개발하게 됩니다.
  
    
@@ -78,7 +82,8 @@
 
 
 
-1. 데이터 소스(DataSource) 설정하기
+<p>$\bf{\large{\color{#6580DD}1. 데이터 소스(DataSource) 설정하기}}$</p> 
+
 데이터 소스는 DB와의 커넥션을 관리해 주는 인터페이스입니다.
  
 데이터 소스 설정은 대표적으로 두 가지 방법을 이용할 수 있습니다.
@@ -112,7 +117,7 @@
         커넥션이 정상적으로 맺어졌는지 확인하기 위한 SQL 쿼리입니다. 애플리케이션이 실행되면 다음의 테스트 쿼리가 콘솔에 출력됩니다.
 
 
-2. 데이터 소스 설정(Data Source Configuration) 클래스 추가하기
+<p>$\bf{\large{\color{#6580DD}2. 데이터 소스 설정(Data Source Configuration) 클래스 추가하기}}$</p> 
 스프링 부트는 클래스 선언부에 @Configuration 어노테이션만 선언해 주면, 해당 파일이 Java 기반의 설정 파일임을 인식합니다.
 데이터 소스 객체(Bean)를 관리해 줄 설정(Configuration) 클래스가 필요합니다.
 
@@ -214,7 +219,7 @@
         sqlSession
         sqlSession 객체를 생성합니다. 마이바티스 공식 문서에는 다음과 같이 정의되어 있습니다.1. SqlSessionTemplate은 마이바티스 스프링 연동 모듈의 핵심이다.2. SqlSessionTemplate은 SqlSession을 구현하고, 코드에서 SqlSession을 대체한다.3. SqlSessionTemplate은 쓰레드에 안전하고, 여러 개의 DAO나 Mapper에서 공유할 수 있다.4. 필요한 시점에 세션을 닫고, 커밋 또는 롤백하는 것을 포함한 세션의 생명주기를 관리한다.SqlSessionTemplate은 SqlSessionFactory를 통해 생성되고, 공식 문서의 내용과 같이 DB의 커밋, 롤백 등 SQL의 실행에 필요한 모든 메서드를 갖는 객체로 생각할 수 있습니다.
 
-3. JUnit으로 단위 테스트 해보기
+<p>$\bf{\large{\color{#6580DD}3. JUnit으로 단위 테스트 해보기}}$</p> 
 스프링은 단위 테스트를 위한 환경과 다양한 기능들을 아낌없이 제공해주고 있습니다. 일반적으로 단위 테스트는 비즈니스 로직 또는 SQL 쿼리에 문제가 있는지 확인하는 용도로 사용되는데 WAS(톰캣)를 구동하지 않은 상태에서도 테스트가 가능하기 때문에 시간적인 측면에서 상당히 유리합니다.
 
 3-1) 소스 코드 작성하기
@@ -281,7 +286,8 @@
 </summary>
    <br>
 
-1. 게시글 테이블 생성하기
+<p>$\bf{\large{\color{#6580DD}1. 게시글 테이블 생성하기}}$</p> 
+
 
          CREATE TABLE `tb_post` (
             `id`            bigint(20)    NOT NULL AUTO_INCREMENT COMMENT 'PK',
@@ -297,7 +303,7 @@
         ) COMMENT '게시글'; 
 
 
-2. 요청 클래스 생성 및 소스 코드 작성하기
+<p>$\bf{\large{\color{#6580DD}2. 요청 클래스 생성 및 소스 코드 작성하기}}$</p> 
 게시글 생성(INSERT)과 수정(UPDATE)에 사용할 요청(Request) 클래스
 
          package com.study.domain.post;
@@ -320,7 +326,7 @@
 @Getter / @Settter
 클래스 레벨에 선언된 두 어노테이션은 롬복(Lombok) 라이브러리에서 제공해 주는 기능으로, 클래스에 선언된 모든 멤버 변수에 대한 getter와 settter를 생성해 주는 역할을 합니다.
 
-3. 게시글 응답(Response) 클래스 생성하기
+<p>$\bf{\large{\color{#6580DD}3. 게시글 응답(Response) 클래스 생성하기}}$</p> 
 사용자에게 보여줄 데이터를 처리할 응답용 클래스입니다. 응답 클래스에는 테이블의 모든 칼럼을 멤버 변수로 선언합니다.
 
          package com.study.domain.post;
@@ -344,7 +350,8 @@
 
          }
 
-4. Mapper 인터페이스 생성하기
+<p>$\bf{\large{\color{#6580DD}4. Mapper 인터페이스 생성하기}}$</p> 
+
 
          package com.study.domain.post;
 
@@ -438,7 +445,7 @@ Mapper에는 @Mapper 어노테이션을 필수적으로 선언해 주어야 하�
 
 
 
-5. mappers 폴더와 XML Mapper 추가하기
+<p>$\bf{\large{\color{#6580DD}5. mappers 폴더와 XML Mapper 추가하기}}$</p> 
 
    
  src/main/resources에 mappers 폴더를 추가하고, 그 안에 PostMapper.xml을 추가합니다.
@@ -554,7 +561,8 @@ SQL 쿼리의 실행 결과를 매핑할 결과 타입을 의미합니다. Mappe
 5-5. #{ } 표현식
 MyBatis는 #{ 변수명 } 표현식을 이용해서 전달받은 파라미터를 기준으로 쿼리를 실행합니다.
 
-6. SELECT 칼럼과 멤버 변수 매핑(바인딩)하기
+<p>$\bf{\large{\color{#6580DD}6. SELECT 칼럼과 멤버 변수 매핑(바인딩)하기}}$</p> 
+
 
    
 MyBatis에서 SELECT 한 결괏값은 응답(Response) 클래스의 멤버 변수와 매핑되어야 합니다. 그러나 DB에서 테이블의 칼럼명은 언더스코어(_)로 연결된 스네이크 케이스를 사용하며, 자바에서 변수명은 소문자로 시작하고, 구분되는 단어의 앞 글자만 대문자로 처리하는 카멜 케이스를 사용합니다.
@@ -563,7 +571,7 @@ MyBatis에서 SELECT 한 결괏값은 응답(Response) 클래스의 멤버 변�
       
       mybatis.configuration.map-underscore-to-camel-case=true
 
-7. DatabaseConfig 클래스 수정하기
+<p>$\bf{\large{\color{#6580DD}7. DatabaseConfig 클래스 수정하기}}$</p> 
 스프링이 properties에서 MyBatis 설정을 읽을 수 있도록 빈(Bean)을 선언해 주어야 합니다.
 DatabaseConfig 소스는 다음과 같습니다.
 

@@ -398,27 +398,42 @@ MyBatis는 Mapper(Java 인터페이스)와 XML Mapper(실제로 DB에 접근해�
 메서드명이 "savePost( )"라고 가정했을 때 SQL id는 "savePost"가 되어야 합니다.
 Mapper에는 @Mapper 어노테이션을 필수적으로 선언해 주어야 하며, Mapper와 XML Mapper는 XML Mapper의 namespace라는 속성을 통해 연결됩니다.
 
+
 4-2. save( )
-게시글을 생성하는 INSERT 쿼리를 호출합니다. 파라미터로 전달받는 params는 요청(PostRequest) 클래스의 객체이며, params에는 저장할 게시글 정보가 담기게 됩니다.
+게시글을 생성하는 INSERT 쿼리를 호출합니다. 
+파라미터로 전달받는 params는 요청(PostRequest) 클래스의 객체이며, params에는 저장할 게시글 정보가 담기게 됩니다.
  
- 
+
+ 
 4-3. findById( )
-특정 게시글을 조회하는 SELECT 쿼리를 호출합니다. 파라미터로 id(PK)를 전달받아 SQL 쿼리의 WHERE 조건으로 사용하며, 쿼리가 실행되면 메서드의 리턴 타입인 응답(PostResponse) 클래스 객체의 각 멤버 변수에 결괏값이 매핑(바인딩)됩니다.
+특정 게시글을 조회하는 SELECT 쿼리를 호출합니다.
+
+파라미터로 id(PK)를 전달받아 SQL 쿼리의 WHERE 조건으로 사용하며, 쿼리가 실행되면 메서드의 리턴 타입인 응답(PostResponse) 클래스 객체의 각 멤버 변수에 결괏값이 매핑(바인딩)됩니다.
  
- 
+
+ 
 4-4. update( )
-게시글 정보를 수정하는 UPDATE 쿼리를 호출합니다. save( )와 마찬가지로 요청(PostRequest) 클래스의 객체를 파라미터로 전달받으며, params에는 수정할 게시글 정보가 담기게 됩니다. save( )와 차이가 있다면, UPDATE 쿼리의 WHERE 조건으로 사용되는 id(PK)에도 값이 담긴다는 점입니다.
+게시글 정보를 수정하는 UPDATE 쿼리를 호출합니다.
+
+save( )와 마찬가지로 요청(PostRequest) 클래스의 객체를 파라미터로 전달받으며, params에는 수정할 게시글 정보가 담기게 됩니다. save( )와 차이가 있다면, UPDATE 쿼리의 WHERE 조건으로 사용되는 id(PK)에도 값이 담긴다는 점입니다.
  
- 
+
+ 
 4-5. deleteById( )
-게시글을 삭제 처리하는 UPDATE 쿼리를 호출합니다. findById( )와 마찬가지로 id(PK)를 파라미터로 전달받아 SQL 쿼리의 WHERE 조건으로 사용하게 되며, SQL 쿼리가 실행되면 삭제 여부(delete_yn) 칼럼의 상태 값을 0(false)에서 1(true)로 업데이트합니다.
+게시글을 삭제 처리하는 UPDATE 쿼리를 호출합니다.
+
+findById( )와 마찬가지로 id(PK)를 파라미터로 전달받아 SQL 쿼리의 WHERE 조건으로 사용하게 되며, SQL 쿼리가 실행되면 삭제 여부(delete_yn) 칼럼의 상태 값을 0(false)에서 1(true)로 업데이트합니다.
 삭제 여부(delete_yn)는 칼럼의 상태 값을 기준으로 삭제된 데이터(1)인지, 삭제되지 않은 데이터(0)인지 구분해 주는 역할을 합니다. 사용자에게 데이터를 보여줄 땐 삭제 여부가 0(false)인 데이터만 노출하게 됩니다.
  
 
+
 4-6. findAll( )
-게시글 목록을 조회하는 SELECT 쿼리를 호출합니다. findById( )는 id(PK)를 기준으로 하나의 게시글을 조회한다면, 해당 메서드는 여러 개의 게시글(PostResponse)을 리스트(List)에 담아 리턴해주는 역할을 합니다.
+게시글 목록을 조회하는 SELECT 쿼리를 호출합니다.
+
+findById( )는 id(PK)를 기준으로 하나의 게시글을 조회한다면, 해당 메서드는 여러 개의 게시글(PostResponse)을 리스트(List)에 담아 리턴해주는 역할을 합니다.
  
- 
+
+ 
 4-7. count( )
 전체 게시글 수를 조회하는 SELECT 쿼리를 호출합니다. 
 

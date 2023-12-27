@@ -682,6 +682,10 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
 
     }
 
+
+
+    
+
 8-1-1. postMapper
 @Autowired를 이용해서 스프링 컨테이너에 등록된 PostMapper 빈(Bean)을 클래스에 주입합니다.
  
@@ -734,13 +738,15 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
         }
 
 8-4) delete( ) 테스트하기
+
  게시글을 삭제 처리하는 delete( )입니다.
-        @Test
-        void delete() {
-            System.out.println("삭제 이전의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
-            postMapper.deleteById(1L);
-            System.out.println("삭제 이후의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
-        }
+ 
+          @Test
+          void delete() {
+              System.out.println("삭제 이전의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
+              postMapper.deleteById(1L);
+              System.out.println("삭제 이후의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
+          }
 
 
 </details>   

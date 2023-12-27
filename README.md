@@ -682,6 +682,66 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
 
     }
 
+8-1-1. postMapper
+@Autowired를 이용해서 스프링 컨테이너에 등록된 PostMapper 빈(Bean)을 클래스에 주입합니다.
+ 
+ 
+8-1-2. save( )
+게시글을 생성하는 메서드입니다. PostRequest 객체를 생성하고, set( ) 메서드를 이용해 값을 세팅한 후 PostMapper의 save( )를 호출합니다. 메서드가 호출되면 PostMapper.xml의 save 쿼리가 실행되며, #{ 변수명 } 표현식을 통해 PostRequest 객체의 멤버 변수에 접근하게 됩니다.
+
+
+8-2. findById( ) 테스트하기
+테이블의 PK인 id를 WHERE 조건으로 특정 게시글을 조회하는 findById( )입니다.
+
+        @Test
+        void findById() {
+            PostResponse post = postMapper.findById(1L);
+            try {
+                String postJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(post);
+                System.out.println(postJson);
+
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+8-2-1. postJson
+스프링 부트에 기본으로 내장되어 있는 Jackson 라이브러리를 이용해서,  응답 객체를 JSON 문자열로 변환한 결과입니다
+
+8-3. update( ) 테스트하기
+기존에 등록된 게시글 정보를 수정하는 update( )입니다.
+
+        @Test
+        void update() {
+            // 1. 게시글 수정
+            PostRequest params = new PostRequest();
+            params.setId(1L);
+            params.setTitle("1번 게시글 제목 수정합니다.");
+            params.setContent("1번 게시글 내용 수정합니다.");
+            params.setWriter("도뎡이");
+            params.setNoticeYn(true);
+            postMapper.update(params);
+
+            // 2. 게시글 상세정보 조회
+            PostResponse post = postMapper.findById(1L);
+            try {
+                String postJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(post);
+                System.out.println(postJson);
+
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+8-4) delete( ) 테스트하기
+ 게시글을 삭제 처리하는 delete( )입니다.
+        @Test
+        void delete() {
+            System.out.println("삭제 이전의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
+            postMapper.deleteById(1L);
+            System.out.println("삭제 이후의 전체 게시글 개수는 : " + postMapper.findAll().size() + "개입니다.");
+        }
+
 
 </details>   
 

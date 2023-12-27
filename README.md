@@ -742,7 +742,7 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
             }
         }
 
-8-4) delete( ) 테스트하기
+8-4. delete( ) 테스트하기
 
  게시글을 삭제 처리하는 delete( )입니다.
  

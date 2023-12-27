@@ -280,12 +280,147 @@
 </summary>
    <br>
 
+1. 게시글 테이블 생성하기
+
+         CREATE TABLE `tb_post` (
+            `id`            bigint(20)    NOT NULL AUTO_INCREMENT COMMENT 'PK',
+            `title`         varchar(100)  NOT NULL COMMENT '제목',
+            `content`       varchar(3000) NOT NULL COMMENT '내용',
+            `writer`        varchar(20)   NOT NULL COMMENT '작성자',
+            `view_cnt`      int(11)       NOT NULL COMMENT '조회 수',
+            `notice_yn`     tinyint(1)    NOT NULL COMMENT '공지글 여부',
+            `delete_yn`     tinyint(1)    NOT NULL COMMENT '삭제 여부',
+            `created_date`  datetime      NOT NULL DEFAULT current_timestamp() COMMENT '생성일시',
+            `modified_date` datetime               DEFAULT NULL COMMENT '최종 수정일시',
+            PRIMARY KEY (`id`)
+        ) COMMENT '게시글'; 
 
 
+2. 요청 클래스 생성 및 소스 코드 작성하기
+게시글 생성(INSERT)과 수정(UPDATE)에 사용할 요청(Request) 클래스
 
+         package com.study.domain.post;
 
+         import lombok.Getter;
+         import lombok.Setter;
 
+         @Getter
+         @Setter
+         public class PostRequest {
 
+             private Long id;             // PK
+             private String title;        // 제목
+             private String content;      // 내용
+             private String writer;       // 작성자
+             private Boolean noticeYn;    // 공지글 여부
+    
+         }
+
+@Getter / @Settter
+클래스 레벨에 선언된 두 어노테이션은 롬복(Lombok) 라이브러리에서 제공해 주는 기능으로, 클래스에 선언된 모든 멤버 변수에 대한 getter와 settter를 생성해 주는 역할을 합니다.
+
+3. 게시글 응답(Response) 클래스 생성하기
+사용자에게 보여줄 데이터를 처리할 응답용 클래스입니다. 응답 클래스에는 테이블의 모든 칼럼을 멤버 변수로 선언합니다.
+
+         package com.study.domain.post;
+
+         import lombok.Getter;
+
+         import java.time.LocalDateTime;
+
+         @Getter
+         public class PostResponse {
+
+             private Long id;                       // PK
+             private String title;                  // 제목
+             private String content;                // 내용
+             private String writer;                 // 작성자
+             private int viewCnt;                   // 조회 수
+             private Boolean noticeYn;              // 공지글 여부
+             private Boolean deleteYn;              // 삭제 여부
+             private LocalDateTime createdDate;     // 생성일시
+             private LocalDateTime modifiedDate;    // 최종 수정일시
+
+         }
+
+4. Mapper 인터페이스 생성하기
+
+         package com.study.domain.post;
+
+         import org.apache.ibatis.annotations.Mapper;
+
+         import java.util.List;
+
+         @Mapper
+         public interface PostMapper {
+
+             /**
+              * 게시글 저장
+              * @param params - 게시글 정보
+              */
+             void save(PostRequest params);
+
+             /**
+              * 게시글 상세정보 조회
+              * @param id - PK
+              * @return 게시글 상세정보
+              */
+             PostResponse findById(Long id);
+    
+             /**
+              * 게시글 수정
+              * @param params - 게시글 정보
+              */
+             void update(PostRequest params);
+
+             /**
+              * 게시글 삭제
+              * @param id - PK
+              */
+             void deleteById(Long id);
+
+             /**
+              * 게시글 리스트 조회
+              * @return 게시글 리스트
+              */
+             List<PostResponse> findAll();
+
+             /**
+              * 게시글 수 카운팅
+              * @return 게시글 수
+              */
+             int count();
+
+         }
+
+4-1. @Mapper
+MyBatis는 Mapper(Java 인터페이스)와 XML Mapper(실제로 DB에 접근해서 호출할 SQL 쿼리를 작성(선언)하는 파일)를 통해 DB와 통신합니다.
+메서드명이 "savePost( )"라고 가정했을 때 SQL id는 "savePost"가 되어야 합니다.
+Mapper에는 @Mapper 어노테이션을 필수적으로 선언해 주어야 하며, Mapper와 XML Mapper는 XML Mapper의 namespace라는 속성을 통해 연결됩니다.
+
+4-2. save( )
+게시글을 생성하는 INSERT 쿼리를 호출합니다. 파라미터로 전달받는 params는 요청(PostRequest) 클래스의 객체이며, params에는 저장할 게시글 정보가 담기게 됩니다.
+ 
+ 
+4-3. findById( )
+특정 게시글을 조회하는 SELECT 쿼리를 호출합니다. 파라미터로 id(PK)를 전달받아 SQL 쿼리의 WHERE 조건으로 사용하며, 쿼리가 실행되면 메서드의 리턴 타입인 응답(PostResponse) 클래스 객체의 각 멤버 변수에 결괏값이 매핑(바인딩)됩니다.
+ 
+ 
+4-4. update( )
+게시글 정보를 수정하는 UPDATE 쿼리를 호출합니다. save( )와 마찬가지로 요청(PostRequest) 클래스의 객체를 파라미터로 전달받으며, params에는 수정할 게시글 정보가 담기게 됩니다. save( )와 차이가 있다면, UPDATE 쿼리의 WHERE 조건으로 사용되는 id(PK)에도 값이 담긴다는 점입니다.
+ 
+ 
+4-5. deleteById( )
+게시글을 삭제 처리하는 UPDATE 쿼리를 호출합니다. findById( )와 마찬가지로 id(PK)를 파라미터로 전달받아 SQL 쿼리의 WHERE 조건으로 사용하게 되며, SQL 쿼리가 실행되면 삭제 여부(delete_yn) 칼럼의 상태 값을 0(false)에서 1(true)로 업데이트합니다.
+삭제 여부(delete_yn)는 칼럼의 상태 값을 기준으로 삭제된 데이터(1)인지, 삭제되지 않은 데이터(0)인지 구분해 주는 역할을 합니다. 사용자에게 데이터를 보여줄 땐 삭제 여부가 0(false)인 데이터만 노출하게 됩니다.
+ 
+
+4-6. findAll( )
+게시글 목록을 조회하는 SELECT 쿼리를 호출합니다. findById( )는 id(PK)를 기준으로 하나의 게시글을 조회한다면, 해당 메서드는 여러 개의 게시글(PostResponse)을 리스트(List)에 담아 리턴해주는 역할을 합니다.
+ 
+ 
+4-7. count( )
+전체 게시글 수를 조회하는 SELECT 쿼리를 호출합니다. 
 
 
 </details>   

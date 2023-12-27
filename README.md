@@ -213,7 +213,58 @@
         sqlSession
         sqlSession 객체를 생성합니다. 마이바티스 공식 문서에는 다음과 같이 정의되어 있습니다.1. SqlSessionTemplate은 마이바티스 스프링 연동 모듈의 핵심이다.2. SqlSessionTemplate은 SqlSession을 구현하고, 코드에서 SqlSession을 대체한다.3. SqlSessionTemplate은 쓰레드에 안전하고, 여러 개의 DAO나 Mapper에서 공유할 수 있다.4. 필요한 시점에 세션을 닫고, 커밋 또는 롤백하는 것을 포함한 세션의 생명주기를 관리한다.SqlSessionTemplate은 SqlSessionFactory를 통해 생성되고, 공식 문서의 내용과 같이 DB의 커밋, 롤백 등 SQL의 실행에 필요한 모든 메서드를 갖는 객체로 생각할 수 있습니다.
 
+3. JUnit으로 단위 테스트 해보기
+스프링은 단위 테스트를 위한 환경과 다양한 기능들을 아낌없이 제공해주고 있습니다. 일반적으로 단위 테스트는 비즈니스 로직 또는 SQL 쿼리에 문제가 있는지 확인하는 용도로 사용되는데 WAS(톰캣)를 구동하지 않은 상태에서도 테스트가 가능하기 때문에 시간적인 측면에서 상당히 유리합니다.
 
+3-1) 소스 코드 작성하기
+여기서는 DatabaseConfig 클래스에 구성한 빈(Bean)을 기준으로 JUnit 단위 테스트 방법입니다. src/test/java 디렉터리의 BoardApplicationTests에 다음의 코드를 작성
+
+        package com.study;
+
+        import org.apache.ibatis.session.SqlSessionFactory;
+        import org.junit.jupiter.api.Test;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.boot.test.context.SpringBootTest;
+        import org.springframework.context.ApplicationContext;
+
+        @SpringBootTest
+        class BoardApplicationTests {
+
+            @Autowired
+            private ApplicationContext context;
+
+            @Autowired
+            private SqlSessionFactory sessionFactory;
+
+            @Test
+            void contextLoads() {
+            }
+
+            @Test
+            public void testByApplicationContext() {
+                try {
+                    System.out.println("=========================");
+                    System.out.println(context.getBean("sqlSessionFactory"));
+                    System.out.println("=========================");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Test
+            public void testBySqlSessionFactory() {
+                try {
+                    System.out.println("=========================");
+                    System.out.println(sessionFactory.toString());
+                    System.out.println("=========================");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
 
 </details>
 

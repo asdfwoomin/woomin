@@ -89,7 +89,7 @@
    1-2. 설정(Configuration) 파일에서 DB 정보를 직접 입력하는 방법
 
  
-이 중 첫 번째 방법을 이용해 데이터 소스 빈(Bean)을 구성합니다. 우선, src/main/resources 디렉터리의 application.properties에 코드작성
+이 중 1-1 방법을 이용해 데이터 소스 빈(Bean)을 구성합니다. 우선, src/main/resources 디렉터리의 application.properties에 코드작성
 
 
         spring.datasource.hikari.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -268,6 +268,7 @@
 
 3-2)소스코드 결과
 테스트에 성공한다면 다음과 같이 주소값이 나오게 됩니다.
+
 
 
 

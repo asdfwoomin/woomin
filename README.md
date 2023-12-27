@@ -757,6 +757,8 @@ src/test/java의 com.study 패키지에 PostMapperTest 클래스를 추가하고
 </details>   
 
 
+
+
 <details>
 <summary>
   <img src="" alt="" width="2%" /> 게시글 등록 기능 구현

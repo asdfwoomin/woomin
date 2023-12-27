@@ -433,10 +433,125 @@ Mapper에는 @Mapper 어노테이션을 필수적으로 선언해 주어야 하�
 
   findById( )는 id(PK)를 기준으로 하나의 게시글을 조회한다면, 해당 메서드는 여러 개의 게시글(PostResponse)을 리스트(List)에 담아 리턴해주는 역할을 합니다.
  
-
- 
 4-7. count( )
   전체 게시글 수를 조회하는 SELECT 쿼리를 호출합니다. 
+
+
+
+5. mappers 폴더와 XML Mapper 추가하기
+ src/main/resources에 mappers 폴더를 추가하고, 그 안에 PostMapper.xml을 추가합니다.
+ 소스는 다음과 같습니다.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.domain.post.PostMapper">
+
+    <!-- tb_post 테이블 전체 컬럼 -->
+    <sql id="postColumns">
+          id
+        , title
+        , content
+        , writer
+        , view_cnt
+        , notice_yn
+        , delete_yn
+        , created_date
+        , modified_date
+    </sql>
+
+
+    <!-- 게시글 저장 -->
+    <insert id="save" parameterType="com.study.domain.post.PostRequest">
+        INSERT INTO tb_post (
+            <include refid="postColumns" />
+        ) VALUES (
+              #{id}
+            , #{title}
+            , #{content}
+            , #{writer}
+            , 0
+            , #{noticeYn}
+            , 0
+            , NOW()
+            , NULL
+        )
+    </insert>
+
+
+    <!-- 게시글 상세정보 조회 -->
+    <select id="findById" parameterType="long" resultType="com.study.domain.post.PostResponse">
+        SELECT
+            <include refid="postColumns" />
+        FROM
+            tb_post
+        WHERE
+            id = #{value}
+    </select>
+
+
+    <!-- 게시글 수정 -->
+    <update id="update" parameterType="com.study.domain.post.PostRequest">
+        UPDATE tb_post
+        SET
+              modified_date = NOW()
+            , title = #{title}
+            , content = #{content}
+            , writer = #{writer}
+            , notice_yn = #{noticeYn}
+        WHERE
+            id = #{id}
+    </update>
+
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="long">
+        UPDATE tb_post
+        SET
+            delete_yn = 1
+        WHERE
+            id = #{id}
+    </delete>
+
+
+    <!-- 게시글 리스트 조회 -->
+    <select id="findAll" resultType="com.study.domain.post.PostResponse">
+        SELECT
+            <include refid="postColumns" />
+        FROM
+            tb_post
+        WHERE
+            delete_yn = 0
+        ORDER BY
+            id DESC
+    </select>
+
+</mapper>
+
+
+5-1. <mapper> 태그
+XML Mapper는 <mapper>로 시작해서 </mapper>로 끝나며, <mapper> 태그의 namespace 속성에 Mapper 인터페이스의 경로를 선언해 주면 Mapper와 XML Mapper가 연결됩니다.
+
+
+ 
+5-2. <sql> 태그와 <include> 태그
+MyBatis는 <sql> 태그와 <include> 태그를 이용해서 공통으로 사용되거나 반복적으로 사용되는 쿼리를 처리할 수 있습니다. 
+각각의 쿼리에 전체 칼럼을 선언해 줘도 되지만, 해당 태그들을 이용하면 코드 라인을 줄일 수 있습니다. 두 태그의 포인트는 중복 제거이며, 동일한 XML Mapper뿐만 아니라, 다른 XML Mapper에 선언된 SQL 조각도 인클루드(Include) 할 수 있습니다.
+
+ 
+ 
+5-3. parameterType
+SQL 쿼리 실행에 필요한 파라미터의 타입을 의미합니다. 단일(하나의) 파라미터가 아닌 경우에는 일반적으로 객체를 전달받아 쿼리를 실행합니다.
+ 
+
+ 
+5-4. resultType
+SQL 쿼리의 실행 결과를 매핑할 결과 타입을 의미합니다. Mapper 인터페이스에 선언한 메서드의 리턴 타입과 동일한 타입으로 선언해 주시면 됩니다.
+ 
+
+ 
+5-5. #{ } 표현식
+MyBatis는 #{ 변수명 } 표현식을 이용해서 전달받은 파라미터를 기준으로 쿼리를 실행합니다.
 
 
 </details>   

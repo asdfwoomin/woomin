@@ -271,9 +271,22 @@
 
 ![캡처](https://github.com/asdfwoomin/woomin/assets/154343478/3b678d10-3d24-4ac7-9d42-ddb7aa74a720)
 
-
-
 </details>
 
 
+<details>
+<summary>
+  <img src="" alt="" width="2%" /> 게시판 CRUD 처리하기
+</summary>
+   <br>
+
+
+
+
+
+
+
+
+
+</details>   
 

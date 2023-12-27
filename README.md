@@ -79,11 +79,11 @@
 이 중 첫 번째 방법을 이용해 데이터 소스 빈(Bean)을 구성합니다. 우선, src/main/resources 디렉터리의 application.properties에 코드작성
 
 
-spring.datasource.hikari.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-spring.datasource.hikari.jdbc-url=jdbc:log4jdbc:mariadb://localhost:3306/board?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-spring.datasource.hikari.username=root
-spring.datasource.hikari.password=root
-spring.datasource.hikari.connection-test-query=SELECT NOW() FROM dual
+        spring.datasource.hikari.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        spring.datasource.hikari.jdbc-url=jdbc:log4jdbc:mariadb://localhost:3306/board?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+        spring.datasource.hikari.username=root
+        spring.datasource.hikari.password=root
+        spring.datasource.hikari.connection-test-query=SELECT NOW() FROM dual
 
 
 1-1) 테이블 생성 스크립트 실행하기

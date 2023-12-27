@@ -1,11 +1,19 @@
 
 스프링부트로 게시판 만들기 (2023.12.18~진행중)
 
--
-                                            게시판 프로젝트 구조
+
+<details>
+<summary>
+  <img src="" alt="" width="2%" /> 게시판 프로젝트 구조
+</summary>
+   <br>
+
 
 ![캡처](https://github.com/asdfwoomin/woomin/assets/154343478/d2dffb55-31b5-4d04-b385-a3110cb57974)
 
+
+
+  
 
 1. src/main/java 디렉터리
 스프링 레거시와 마찬가지로 클래스, 인터페이스 등 Java 관련 파일이 위치하는 디렉터리입니다.
@@ -58,11 +66,16 @@
          6-3.  컨트롤러, Controller - (C)
            모델(M)과 뷰(V)의 중간 다리 역할을 하는 영역입니다. 사용자가 웹에서 어떠한 요청을 하면 가장 먼저 컨트롤러를 경유합니다. 컨트롤러는 사용자의 요청을 처리할 어떠한 로직을 호출하고, 호출한 로직의 실행 결과를 사용자에게 전달하는 역할을 합니다.예를 들어, 사용자가 게시글 등록을 요청하면 컨트롤러는 게시글의 제목, 내용, 작성자 등 사용자가 입력한 데이터(파라미터)를 전달받아 유효성을 검증합니다.검증이 완료되면 모델 영역에 데이터의 가공을 요청하며, 가공이 완료되면 전달받은 데이터를 DB에 저장한 후, 데이터 등록 성공 또는 실패 여부를 컨트롤러로 전달합니다. 마지막으로 컨트롤러는 등록 요청에 대한 결과를 사용자(View)에게 전달합니다.
 
+</details>
 
 
+<details>
+<summary>
+  <img src="" alt="" width="2%" /> 게시판 mariaDB 연동하기
+</summary>
+   <br>
 
--
-                                            게시판 mariaDB 연동하기
+
 
 
 1. 데이터 소스(DataSource) 설정하기
@@ -85,6 +98,11 @@
         spring.datasource.hikari.password=root
         spring.datasource.hikari.connection-test-query=SELECT NOW() FROM dual
 
+
+
+
+
+</details>
 
 1-1) 테이블 생성 스크립트 실행하기
 

@@ -269,7 +269,7 @@
 3-2)소스코드 결과
 테스트에 성공한다면 다음과 같이 주소값이 나오게 됩니다.
 
-
+![캡처](https://github.com/asdfwoomin/woomin/assets/154343478/3b678d10-3d24-4ac7-9d42-ddb7aa74a720)
 
 
 

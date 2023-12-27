@@ -159,6 +159,7 @@
                 SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
                 factoryBean.setDataSource(dataSource());
         //		factoryBean.setMapperLocations(context.getResources("classpath:/mappers/**/*Mapper.xml"));
+        //    주석처리된 부분은 myBatisX 플러그인 설치 후 가능합니다.
                 return factoryBean.getObject();
             }
 

@@ -939,4 +939,325 @@ useGeneratedKeys 옵션을 true로 설정하면 생성된 게시글의 PK가 par
 메서드의 파라미터로 선언된 Model 인터페이스는 데이터를 화면(HTML)으로 전달하는 데 사용됩니다.
 
 
+<p>$\bf{\large{\color{#6580DD}5. 공통 레이아웃(layout) 적용하기}}$</p> 
+화면에서 공통으로 사용할 레이아웃(layout)을 적용합니다. 글쓰기(write) 페이지, 게시글 상세(view) 페이지, 게시글 리스트(list) 페이지에 공통으로 적용되는 머리(header)와 몸통(body)입니다.
+타임리프의 레이아웃 기능을 이용하려면 라이브러리를 추가해야 하는데요. build.gradle의 dependencies에 다음의 라이브러리를 선언합니다.
+
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' /* Thymeleaf Layout */
+
+
+<p>$\bf{\large{\color{#6580DD}6. 헤더(header), 바디(body) 생성하기}}$</p>     
+
+6-1. src/main/resources/templates에 fragments와 layout 폴더를 추가하고, fragments에 header와 body를 추가합니다.
+
+header.html
+
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head th:fragment="main-head">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+        <th:block layout:fragment="title"></th:block>
+
+        <link rel="stylesheet" th:href="@{/css/default.css}" />
+        <link rel="stylesheet" th:href="@{/css/common.css}" />
+        <link rel="stylesheet" th:href="@{/css/content.css}" />
+        <link rel="stylesheet" th:href="@{/css/button.css}" />
+
+        <th:block layout:fragment="add-css"></th:block>
+    </head>
+    </html>
+
+
+:fragment
+<head> 태그에 해당 속성을 사용해서 fragment의 이름을 지정합니다. fragment는 다른 HTML에서 include 또는 replace 해서 적용할 수 있습니다.
+
+
+th:block
+layout:fragment 속성에 이름을 지정해서 실제 컨텐츠 페이지의 내용을 채우는 기능입니다. 해당 기능은 동적(Dynamic)인 처리가 필요할 때 사용됩니다.
+
+
+th:href 
+<a> 태그의 href 속성과 동일하며, JSTL의 <c:url> 태그와 마찬가지로 웹 애플리케이션을 구분하는 콘텍스트 경로(Context Path)를 포함합니다. 콘텍스트 경로(Context Path)는 application.properties에서 변경할 수 있습니다.
+
+
+body.html
+
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <body th:fragment="main-body">
+        <div id="adm_wrap">
+            <header>
+                <div class="head">
+                    <h1>게시판 프로젝트</h1>
+                    <div class="top_menu">
+                        <div class="login_user"><strong><i class="far fa-user-circle"></i> 도뎡</strong>님 반갑습니다.</div>
+                        <div class="logout"><button type="button"><span class="skip_info">로그아웃</span><i class="fas fa-sign-out-alt"></i></button></div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="container">
+                <div class="menu_toggle"><span></span></div>
+                <!--/* 좌측 영역 */-->
+                <div class="lcontent">
+                    <!--/* 메뉴 */-->
+                    <nav>
+                        <ul>
+                            <li class="has_sub"><a href="javascript: void(0);" class="on"><span>게시판 관리</span></a>
+                                <ul>
+                                    <li><a href="/post/list.do" class="on">리스트형</a></li>
+                                    <li><a href="javascript: alert('준비 중입니다.');">갤러리형</a></li>
+                                    <li><a href="javascript: alert('준비 중입니다.');">캘린더형</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="javascript: alert('준비 중입니다.');"><span>회원 관리</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!--/* 우측 영역 */-->
+                <div class="rcontent">
+
+                    <!--/* 페이지별 컨텐츠 */-->
+                    <th:block layout:fragment="content"></th:block>
+
+                </div>
+            </div> <!--/* // #container */-->
+            <footer>Copyright(c)네임즈.All rights reserved.</footer>
+        </div>
+
+        <script th:src="@{/js/function.js}"></script>
+        <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+        <script th:src="@{/js/common.js}"></script>
+        <script src="https://kit.fontawesome.com/79613ae794.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
+        <th:block layout:fragment="script"></th:block>
+    </body>
+    </html>
+    
+
+6-2. 글쓰기 페이지에 레이아웃 적용하기
+
+write.html
+
+    <!DOCTYPE html>
+    <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+        <head th:replace="fragments/header :: main-head"> </head>
+        <body th:replace="fragments/body :: main-body"> </body>
+    </html>
+
+th:replace
+JSP의 <include> 태그와 유사한 속성으로, header.html의 main-head와 body.html의 main-body 프래그먼트를 찾아 해당 코드로 치환(replace)합니다.
+
+6-3. 레이아웃 인클루드(include) 하기
+
+헤더(header)와 바디(body)는 게시판의 모든 페이지에서 공통으로 사용되기 때문에 레이아웃으로 처리되어야 합니다.  layout 폴더에 basic.html을 추가합니다.
+그리고 write.html을 변경합니다.
+
+write.html
+
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/basic">
+        <th:block layout:fragment="title">
+            <title>글작성 페이지</title>
+        </th:block>
+    </html>
+
+xmlns:th
+타임리프의 th 속성을 사용하기 위한 선언입니다.
+
+
+xmlns:layout
+타임리프의 레이아웃 기능을 사용하기 위한 선언입니다.
+
+
+xmlnslayout:decorate
+레이아웃으로 basic.html을 사용하겠다는 의미입니다.
+
+
+th:block layout:fragment
+layout:fragment 속성에 이름을 지정해서 실제 컨텐츠(content) 페이지의 내용을 채우게 됩니다. 
+예를 들어, 글쓰기 페이지는 "write page"로, 게시글 리스트 페이지는 "list page"로, 페이지마다 타이틀을 다르게 처리하고 싶을 때 해당 속성을 이용해서 타이틀을 동적(Dynamic)으로 처리할 수 있습니다.
+쉽게 말해, 페이지별로 사용자에게 보여주는 내용이 다르기 때문에, 필요한 경우 해당 속성을 이용해서 컨텐츠를 동적으로 컨트롤 해주면 됩니다.
+
+
+<p>$\bf{\large{\color{#6580DD}7. 글작성 페이지 처리하기}}$</p>  
+
+7-1. openPostWrite( ) 수정하기
+PostController의 openPostWrite( ) 메서드를 다음과 같이 변경합니다.
+
+        // 게시글 작성 페이지
+        @GetMapping("/post/write.do")
+        public String openPostWrite(@RequestParam(value = "id", required = false) final Long id, Model model) {
+            if (id != null) {
+                PostResponse post = postService.findPostById(id);
+                model.addAttribute("post", post);
+            }
+            return "post/write";
+        }
+
+
+
+@RequestParam
+화면(HTML)에서 보낸 파라미터를 전달받는 데 사용됩니다. 예를 들어, 신규 게시글을 등록하는 경우에는 게시글 번호(id)가 null로 전송됩니다. 하지만, 기존 게시글을 수정하는 경우에는 수정할 게시글 번호(id)가 openPostWrite( )의 파라미터로 전송되고, 전달받은 게시글 번호(id)를 이용해 게시글 상세정보를 조회한 후 화면(HTML)으로 전달합니다.
+신규 게시글 등록에는 게시글 번호(id)가 필요하지 않기 때문에 required 속성을 false로 지정합니다. 필수(required) 속성은 default 값이 true이며, required 속성을 false로 지정하지 않으면, id가 파라미터로 넘어오지 않았을 때 예외가 발생합니다.
+ 
+ 
+전체 로직
+게시글 번호(id)를 파라미터로 전달받은 경우, 즉 기존 게시글을 수정하는 경우에는, 게시글 번호(id)를 이용해서 조회한 게시글 상세 정보(응답 객체)를 post라는 이름으로 해서 화면(HTML)으로 전달합니다.
+
+
+
+7-2. 글 작성 영역 추가하기
+
+write.html 변경합니다.
+
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/basic">
+        <th:block layout:fragment="title">
+            <title>글작성 페이지</title>
+        </th:block>
+
+        <th:block layout:fragment="content">
+            <div class="page_tits">
+                <h3>게시판 관리</h3>
+                <p class="path"><strong>현재 위치 :</strong> <span>게시판 관리</span> <span>리스트형</span> <span>글작성</span></p>
+            </div>
+
+            <div class="content">
+                <section>
+                    <form id="saveForm" method="post" autocomplete="off">
+                        <!--/* 게시글 수정인 경우, 서버로 전달할 게시글 번호 (PK) */-->
+                        <input type="hidden" id="id" name="id" th:if="${post != null}" th:value="${post.id}" />
+
+                        <!--/* 서버로 전달할 공지글 여부 */-->
+                        <input type="hidden" id="noticeYn" name="noticeYn" />
+                        <table class="tb tb_row">
+                            <colgroup>
+                                <col style="width:15%;" /><col style="width:35%;" /><col style="width:15%;" /><col style="width:35%;" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">공지글</th>
+                                    <td><span class="chkbox"><input type="checkbox" id="isNotice" name="isNotice" class="chk" /><i></i><label for="isNotice"> 설정</label></span></td>
+
+                                    <th scope="row">등록일</th>
+                                    <td colspan="3"><input type="text" id="createdDate" name="createdDate" readonly /></td>
+                                </tr>
+
+                                <tr>
+                                    <th>제목 <span class="es">필수 입력</span></th>
+                                    <td colspan="3"><input type="text" id="title" name="title" maxlength="50" placeholder="제목을 입력해 주세요." /></td>
+                                </tr>
+
+                                <tr>
+                                    <th>이름 <span class="es">필수 입력</span></th>
+                                    <td colspan="3"><input type="text" id="writer" name="writer" maxlength="10" placeholder="이름을 입력해 주세요." /></td>
+                                </tr>
+
+                                <tr>
+                                    <th>내용 <span class="es">필수 입력</span></th>
+                                    <td colspan="3"><textarea id="content" name="content" cols="50" rows="10" placeholder="내용을 입력해 주세요."></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <p class="btn_set">
+                        <button type="button" id="saveBtn" onclick="savePost();" class="btns btn_st3 btn_mid">저장</button>
+                        <a th:href="@{/post/list.do}" class="btns btn_bdr3 btn_mid">뒤로</a>
+                    </p>
+                </section>
+            </div> <!--/* .content */-->
+        </th:block>
+
+        <th:block layout:fragment="script">
+            <script th:inline="javascript">
+            /*<![CDATA[*/
+
+                window.onload = () => {
+                    initCreatedDate();
+                }
+
+
+                // 등록일 초기화
+                function initCreatedDate() {
+                    document.getElementById('createdDate').value = dayjs().format('YYYY-MM-DD');
+                }
+
+
+                // 게시글 저장(수정)
+                function savePost() {
+                    const form = document.getElementById('saveForm');
+                    const fields = [form.title, form.writer, form.content];
+                    const fieldNames = ['제목', '이름', '내용'];
+
+                    for (let i = 0, len = fields.length; i < len; i++) {
+                        isValid(fields[i], fieldNames[i]);
+                    }
+
+                    document.getElementById('saveBtn').disabled = true;
+                    form.noticeYn.value = form.isNotice.checked;
+                    form.action = [[ ${post == null} ]] ? '/post/save.do' : '/post/update.do';
+                    form.submit();
+                }
+
+            /*]]>*/
+            </script>
+        </th:block>
+    </html>
+
+
+
+layout:fragment="content"
+게시글 등록 페이지는 게시글 정보를 입력할 수 있는 폼이 필요하고, 게시글 리스트 페이지는 게시글 정보를 보여주는 테이블이 필요합니다. 즉, 타이틀과 마찬가지로 페이지마다 컨텐츠 영역의 형태가 다르기 때문에 layout:fragment를 이용합니다.
+
+
+<form> 태그
+폼은 태그 안에 선언되어 있는 <input>, <textarea> 등 </span사용자가 입력(선택)한 필드의 "name" 값을 기준으로 폼 "action"에 지정된 URI로 폼 데이터(파라미터)를 전달합니다. 여기서 action의 URI는 컨트롤러의 메서드를 의미합니다.method 속성에는 HTTP 요청 메서드를 지정합니다. HTTP 요청 메서드는 대표적으로 GET과 POST가 사용되는데 GET은 데이터의 조회를 의미하고, POST는 데이터의 생성을 의미합니다.
+예를 들어, 데이터를 조회하는 SELECT와 같은 행위는 GET 방식으로 처리되어야 하며, 데이터의 생성, 수정, 삭제를 의미하는 INSERT, UPDATE, DELETE와 같은 행위는 POST 방식으로 처리되어야 합니다.
+
+
+layout:fragment="script"
+자바스크립트도 마찬가지로 페이지마다 로직이 다르기 때문에 layout:fragment를 이용합니다.
+
+
+th:inline="javascript"
+<script> 태그에 th:inline 속성을 javascript로 선언해야 자바스크립트 내에서 타임리프 문법을 사용할 수 있습니다.
+
+
+<![CDATA[]]>
+타임리프는 '<', '>' 태그를 엄격하게 검사하기 때문에 자바스크립트 코드는 꼭 CDATA로 묶어줘야 한다고 합니다. CDATA는 특수문자를 전부 문자열로 치환(replace)할 때 사용합니다.
+
+
+initCreatedDate( ) 함수
+해당 함수는 신규 게시글을 등록할 때, 등록일에 오늘 날짜를 렌더링 해주는 역할을 합니다. 
+dayjs는 JS 영역에서 날짜 데이터를 쉽게 컨트롤 할 수 있도록 도와주는 라이브러리인데요. 
+body.html 하단의 <script src="https://cdn.....dayjs.min.js> 코드를 통해 dayjs 라이브러리를 import 해서 사용합니다.
+
+
+savePost( ) 함수
+해당 함수는 저장하기 버튼의 onclick 이벤트를 통해 실행됩니다. fields에는 제목, 이름, 내용 필드를, fieldNames에는 각 필드의 이름을 담아 반복문 안에서 isValid( ) 함수를 호출해 값이 입력되지 않은 필드를 탐색합니다.
+isValid( ) 함수는 앞에서 다운로드 받은 static 폴더에 있는 function.js에 선언된 함수입니다. 
+해당 함수는 필드의 value 값을 체크해서, 값이 비어있는 경우 해당 필드로 포커싱 해주는 역할을 하는 함수입니다. 앞으로 JS 영역에서 공통으로 사용할 함수들은 /static/js/function.js에 추가해 나갈 예정입니다.
+또한, 데이터 중복 저장을 방지하기 위한 로직입니다. 저장 버튼을 클릭한 상태에서 한 번 더 클릭하면 같은 내용의 게시글이 두 개 저장됩니다. 이러한 상황을 방지하고자, 저장 로직이 실행되었을 때 저장 버튼이 작동하지 않도록 비활성화(disabled)합니다.
+또한, 공지글 여부의 값을 세팅하는 로직입니다. 공지글 설정이 체크되어 있으면 true, 아니면 false로 hidden 타입의 noticeYn 필드 값이 세팅됩니다.
+action을 설정하는 로직입니다. 
+컨트롤러에서 전달받은 게시글 응답 객체(post)의 유무에 따라 신규 저장인지, 기존 게시글의 수정인지를 구분합니다. "/post/save.do"는 신규 저장을, "/post/update.do"는 수정을 의미합니다.
+마지막으로  form.submit( )을 호출해서 폼 데이터(파라미터)를 서버(컨트롤러)로 전달합니다.
+  
+
+<p>$\bf{\large{\color{#6580DD}8. 게시글 등록 메서드 추가하기}}$</p>  
+PostController에 다음의 메서드를 추가합니다.
+
+
+          // 신규 게시글 생성
+        @PostMapping("/post/save.do")
+        public String savePost(final PostRequest params) {
+            postService.savePost(params);
+            return "redirect:/post/list.do";
+        }
+  
 </details>   

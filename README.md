@@ -878,5 +878,62 @@ PostMapper 인터페이스의 @Mapper와 유사하며, 해당 클래스가 비�
 
     }
 
+<p>$\bf{\large{\color{#6580DD}3. MyBatis useGeneratedKeys 기능 적용해 보기}}$</p> 
+
+3-1. PostMapper.xml 수정하기
+
+    <insert id="save" parameterType="com.study.domain.post.PostRequest" useGeneratedKeys="true" keyProperty="id">
+
+useGeneratedKeys 옵션을 true로 설정하면 생성된 게시글의 PK가 parameterType에 선언된 요청 객체(params)에 저장되며, keyProperty에 선언된 id에 값이 매핑(바인딩)됩니다.
+
+
+<p>$\bf{\large{\color{#6580DD}4. 컨트롤러(Presentation Layer) 클래스 생성하기}}$</p> 
+
+컨트롤러는 MVC 패턴 중 C(Controller)에 해당되며, Model(서비스)과 View(UI == 화면)의 중간다리 역할을 하는 영역입니다. 
+화면에서 사용자의 요청이 들어오면 가장 먼저 컨트롤러를 경유합니다.
+컨트롤러는 사용자의 요구사항을 처리해 줄 서비스의 메서드(비즈니스 로직)를 호출하고, 그에 대한 실행 결과를 다시 화면으로 전달하는 역할을 합니다.
+
+
+4-1. 컨트롤러 클래스 생성 및 소스 코드 작성하기
+
+    package com.study.domain.post;
+
+    import lombok.RequiredArgsConstructor;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+
+    @Controller
+    @RequiredArgsConstructor
+    public class PostController {
+
+        private final PostService postService;
+
+        // 게시글 작성 페이지
+        @GetMapping("/post/write.do")
+        public String openPostWrite(Model model) {
+            return "post/write";
+        }
+
+    }
+
+4-1-1. @Controller
+해당 클래스가 사용자의 요청과 응답을 처리(UI를 담당)하는 컨트롤러 클래스임을 의미합니다.
+  
+4-1-2. @GetMapping
+과거의 스프링은 컨트롤러 메서드에 URI(주소)와 HTTP 요청 메서드를 매핑하기 위해 @RequestMapping을 이용해서 value에는 URI를, method에는 HTTP 요청 메서드를 지정(선언)해 주어야만 했습니다.
+ 
+스프링 4.3 버전부터는 @GetMapping, @PostMapping 등 요청 메서드의 타입별로 매핑을 처리할 수 있는 어노테이션이 추가되었습니다.
+
+과거의 URI 매핑) @RequestMapping(value = "...", method = RequestMethod.XXX)
+현재의 URI 매핑) @xxxMapping("...")
+
+4-1-3. 리턴 타입
+컨트롤러 메서드는 void, String, ModelAndView, Map, List 등 어떤 타입이던 리턴 타입으로 선언할 수 있습니다. 일반적으로 사용자가 보는 화면(HTML)을 처리할 때는 리턴 타입을 String으로 선언하고, 리턴 문에 HTML 파일의 경로를 선언해 주면 됩니다. 
+리턴 문에 선언된 HTML 경로에는 접미사(suffix)로 확장자(.html)가 자동으로 연결되기 때문에 확장자를 생략할 수 있습니다.
+ 
+4-1-4. Model
+메서드의 파라미터로 선언된 Model 인터페이스는 데이터를 화면(HTML)으로 전달하는 데 사용됩니다.
+
 
 </details>   

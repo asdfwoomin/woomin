@@ -1241,23 +1241,27 @@ body.html 하단의 <script src="https://cdn.....dayjs.min.js> 코드를 통해
 savePost( ) 함수
 해당 함수는 저장하기 버튼의 onclick 이벤트를 통해 실행됩니다. fields에는 제목, 이름, 내용 필드를, fieldNames에는 각 필드의 이름을 담아 반복문 안에서 isValid( ) 함수를 호출해 값이 입력되지 않은 필드를 탐색합니다.
 isValid( ) 함수는 앞에서 다운로드 받은 static 폴더에 있는 function.js에 선언된 함수입니다. 
+  
 해당 함수는 필드의 value 값을 체크해서, 값이 비어있는 경우 해당 필드로 포커싱 해주는 역할을 하는 함수입니다. 앞으로 JS 영역에서 공통으로 사용할 함수들은 /static/js/function.js에 추가해 나갈 예정입니다.
+  
 또한, 데이터 중복 저장을 방지하기 위한 로직입니다. 저장 버튼을 클릭한 상태에서 한 번 더 클릭하면 같은 내용의 게시글이 두 개 저장됩니다. 이러한 상황을 방지하고자, 저장 로직이 실행되었을 때 저장 버튼이 작동하지 않도록 비활성화(disabled)합니다.
 또한, 공지글 여부의 값을 세팅하는 로직입니다. 공지글 설정이 체크되어 있으면 true, 아니면 false로 hidden 타입의 noticeYn 필드 값이 세팅됩니다.
-action을 설정하는 로직입니다. 
+
 컨트롤러에서 전달받은 게시글 응답 객체(post)의 유무에 따라 신규 저장인지, 기존 게시글의 수정인지를 구분합니다. "/post/save.do"는 신규 저장을, "/post/update.do"는 수정을 의미합니다.
 마지막으로  form.submit( )을 호출해서 폼 데이터(파라미터)를 서버(컨트롤러)로 전달합니다.
   
 
+  
 <p>$\bf{\large{\color{#6580DD}8. 게시글 등록 메서드 추가하기}}$</p>  
 PostController에 다음의 메서드를 추가합니다.
 
 
-          // 신규 게시글 생성
-        @PostMapping("/post/save.do")
-        public String savePost(final PostRequest params) {
-            postService.savePost(params);
-            return "redirect:/post/list.do";
-        }
+  
+    // 신규 게시글 생성
+      @PostMapping("/post/save.do")
+      public String savePost(final PostRequest params) {
+      postService.savePost(params);
+      return "redirect:/post/list.do";
+    }
   
 </details>   

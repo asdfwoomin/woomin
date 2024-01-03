@@ -1215,11 +1215,9 @@ write.html 변경합니다.
 
 
 
-
-7-2-2.  <form> 태그
+7-2-2.  form 태그
 폼은 태그 안에 선언되어 있는 <input>, <textarea> 등 </span사용자가 입력(선택)한 필드의 "name" 값을 기준으로 폼 "action"에 지정된 URI로 폼 데이터(파라미터)를 전달합니다. 여기서 action의 URI는 컨트롤러의 메서드를 의미합니다.method 속성에는 HTTP 요청 메서드를 지정합니다. HTTP 요청 메서드는 대표적으로 GET과 POST가 사용되는데 GET은 데이터의 조회를 의미하고, POST는 데이터의 생성을 의미합니다.
 예를 들어, 데이터를 조회하는 SELECT와 같은 행위는 GET 방식으로 처리되어야 하며, 데이터의 생성, 수정, 삭제를 의미하는 INSERT, UPDATE, DELETE와 같은 행위는 POST 방식으로 처리되어야 합니다.
-
 
 
 
@@ -1227,51 +1225,35 @@ write.html 변경합니다.
 자바스크립트도 마찬가지로 페이지마다 로직이 다르기 때문에 layout:fragment를 이용합니다.
 
 
-
-
 7-2-4.  th:inline="javascript"
 <script> 태그에 th:inline 속성을 javascript로 선언해야 자바스크립트 내에서 타임리프 문법을 사용할 수 있습니다.
 
 
-
   
-7-2-5.   <![CDATA[]]>
-타임리프는 '<', '>' 태그를 엄격하게 검사하기 때문에 자바스크립트 코드는 꼭 CDATA로 묶어줘야 한다고 합니다. CDATA는 특수문자를 전부 문자열로 치환(replace)할 때 사용합니다.
 
 
-
-7-2-6.   initCreatedDate( ) 함수
-해당 함수는 신규 게시글을 등록할 때, 등록일에 오늘 날짜를 렌더링 해주는 역할을 합니다. 
-dayjs는 JS 영역에서 날짜 데이터를 쉽게 컨트롤 할 수 있도록 도와주는 라이브러리인데요. 
-body.html 하단의 <script src="https://cdn.....dayjs.min.js> 코드를 통해 dayjs 라이브러리를 import 해서 사용합니다.
 
 
   
-7-2-7.   savePost( ) 함수
-해당 함수는 저장하기 버튼의 onclick 이벤트를 통해 실행됩니다. fields에는 제목, 이름, 내용 필드를, fieldNames에는 각 필드의 이름을 담아 반복문 안에서 isValid( ) 함수를 호출해 값이 입력되지 않은 필드를 탐색합니다.
-isValid( ) 함수는 앞에서 다운로드 받은 static 폴더에 있는 function.js에 선언된 함수입니다. 
-
-해당 함수는 필드의 value 값을 체크해서, 값이 비어있는 경우 해당 필드로 포커싱 해주는 역할을 하는 함수입니다. 앞으로 JS 영역에서 공통으로 사용할 함수들은 /static/js/function.js에 추가해 나갈 예정입니다.
   
-
-컨트롤러에서 전달받은 게시글 응답 객체(post)의 유무에 따라 신규 저장인지, 기존 게시글의 수정인지를 구분합니다. "/post/save.do"는 신규 저장을, "/post/update.do"는 수정을 의미합니다.
-마지막으로  form.submit( )을 호출해서 폼 데이터(파라미터)를 서버(컨트롤러)로 전달합니다.
-  
-
- 
   
 <p>$\bf{\large{\color{#6580DD}8. 게시글 등록 메서드 추가하기}}$</p>  
 
-  
-  PostController에 다음의 메서드를 추가합니다.
-
 
   
-    // 신규 게시글 생성
+PostController에 다음의 메서드를 추가합니다.
+
+
+            // 신규 게시글 생성
+        
       @PostMapping("/post/save.do")
+        
       public String savePost(final PostRequest params) {
+        
       postService.savePost(params);
+      
       return "redirect:/post/list.do";
+     
     }
-  
+                      
 </details>   

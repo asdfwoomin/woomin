@@ -970,15 +970,15 @@ header.html
     </html>
 
 
-:fragment
+6-1-1.   :fragment
 <head> 태그에 해당 속성을 사용해서 fragment의 이름을 지정합니다. fragment는 다른 HTML에서 include 또는 replace 해서 적용할 수 있습니다.
 
 
-th:block
+6-1-2.   th:block
 layout:fragment 속성에 이름을 지정해서 실제 컨텐츠 페이지의 내용을 채우는 기능입니다. 해당 기능은 동적(Dynamic)인 처리가 필요할 때 사용됩니다.
 
 
-th:href 
+6-1-3.   th:href 
 <a> 태그의 href 속성과 동일하며, JSTL의 <c:url> 태그와 마찬가지로 웹 애플리케이션을 구분하는 콘텍스트 경로(Context Path)를 포함합니다. 콘텍스트 경로(Context Path)는 application.properties에서 변경할 수 있습니다.
 
 
@@ -1066,19 +1066,19 @@ write.html
         </th:block>
     </html>
 
-xmlns:th
+6-3-1.  xmlns:th
 타임리프의 th 속성을 사용하기 위한 선언입니다.
 
 
-xmlns:layout
+6-3-2.  xmlns:layout
 타임리프의 레이아웃 기능을 사용하기 위한 선언입니다.
 
 
-xmlnslayout:decorate
+6-3-3.   xmlnslayout:decorate
 레이아웃으로 basic.html을 사용하겠다는 의미입니다.
 
 
-th:block layout:fragment
+6-3-4.   th:block layout:fragment
 layout:fragment 속성에 이름을 지정해서 실제 컨텐츠(content) 페이지의 내용을 채우게 됩니다. 
 예를 들어, 글쓰기 페이지는 "write page"로, 게시글 리스트 페이지는 "list page"로, 페이지마다 타이틀을 다르게 처리하고 싶을 때 해당 속성을 이용해서 타이틀을 동적(Dynamic)으로 처리할 수 있습니다.
 쉽게 말해, 페이지별로 사용자에게 보여주는 내용이 다르기 때문에, 필요한 경우 해당 속성을 이용해서 컨텐츠를 동적으로 컨트롤 해주면 됩니다.
@@ -1101,10 +1101,9 @@ PostController의 openPostWrite( ) 메서드를 다음과 같이 변경합니다
 
 
 
-@RequestParam
+7-1-1.   @RequestParam
 화면(HTML)에서 보낸 파라미터를 전달받는 데 사용됩니다. 예를 들어, 신규 게시글을 등록하는 경우에는 게시글 번호(id)가 null로 전송됩니다. 하지만, 기존 게시글을 수정하는 경우에는 수정할 게시글 번호(id)가 openPostWrite( )의 파라미터로 전송되고, 전달받은 게시글 번호(id)를 이용해 게시글 상세정보를 조회한 후 화면(HTML)으로 전달합니다.
 신규 게시글 등록에는 게시글 번호(id)가 필요하지 않기 때문에 required 속성을 false로 지정합니다. 필수(required) 속성은 default 값이 true이며, required 속성을 false로 지정하지 않으면, id가 파라미터로 넘어오지 않았을 때 예외가 발생합니다.
- 
  
 전체 로직
 게시글 번호(id)를 파라미터로 전달받은 경우, 즉 기존 게시글을 수정하는 경우에는, 게시글 번호(id)를 이용해서 조회한 게시글 상세 정보(응답 객체)를 post라는 이름으로 해서 화면(HTML)으로 전달합니다.
@@ -1211,44 +1210,44 @@ write.html 변경합니다.
 
 
 
-layout:fragment="content"
+7-2-1.  layout:fragment="content"
 게시글 등록 페이지는 게시글 정보를 입력할 수 있는 폼이 필요하고, 게시글 리스트 페이지는 게시글 정보를 보여주는 테이블이 필요합니다. 즉, 타이틀과 마찬가지로 페이지마다 컨텐츠 영역의 형태가 다르기 때문에 layout:fragment를 이용합니다.
 
 
 
 
-<form> 태그
+7-2-2.  <form> 태그
 폼은 태그 안에 선언되어 있는 <input>, <textarea> 등 </span사용자가 입력(선택)한 필드의 "name" 값을 기준으로 폼 "action"에 지정된 URI로 폼 데이터(파라미터)를 전달합니다. 여기서 action의 URI는 컨트롤러의 메서드를 의미합니다.method 속성에는 HTTP 요청 메서드를 지정합니다. HTTP 요청 메서드는 대표적으로 GET과 POST가 사용되는데 GET은 데이터의 조회를 의미하고, POST는 데이터의 생성을 의미합니다.
 예를 들어, 데이터를 조회하는 SELECT와 같은 행위는 GET 방식으로 처리되어야 하며, 데이터의 생성, 수정, 삭제를 의미하는 INSERT, UPDATE, DELETE와 같은 행위는 POST 방식으로 처리되어야 합니다.
 
 
 
 
-layout:fragment="script"
+7-2-3.  layout:fragment="script"
 자바스크립트도 마찬가지로 페이지마다 로직이 다르기 때문에 layout:fragment를 이용합니다.
 
 
 
 
-th:inline="javascript"
+7-2-4.  th:inline="javascript"
 <script> 태그에 th:inline 속성을 javascript로 선언해야 자바스크립트 내에서 타임리프 문법을 사용할 수 있습니다.
 
 
 
   
-<![CDATA[]]>
+7-2-5.   <![CDATA[]]>
 타임리프는 '<', '>' 태그를 엄격하게 검사하기 때문에 자바스크립트 코드는 꼭 CDATA로 묶어줘야 한다고 합니다. CDATA는 특수문자를 전부 문자열로 치환(replace)할 때 사용합니다.
 
 
 
-initCreatedDate( ) 함수
+7-2-6.   initCreatedDate( ) 함수
 해당 함수는 신규 게시글을 등록할 때, 등록일에 오늘 날짜를 렌더링 해주는 역할을 합니다. 
 dayjs는 JS 영역에서 날짜 데이터를 쉽게 컨트롤 할 수 있도록 도와주는 라이브러리인데요. 
 body.html 하단의 <script src="https://cdn.....dayjs.min.js> 코드를 통해 dayjs 라이브러리를 import 해서 사용합니다.
 
 
   
-savePost( ) 함수
+7-2-7.   savePost( ) 함수
 해당 함수는 저장하기 버튼의 onclick 이벤트를 통해 실행됩니다. fields에는 제목, 이름, 내용 필드를, fieldNames에는 각 필드의 이름을 담아 반복문 안에서 isValid( ) 함수를 호출해 값이 입력되지 않은 필드를 탐색합니다.
 isValid( ) 함수는 앞에서 다운로드 받은 static 폴더에 있는 function.js에 선언된 함수입니다. 
 

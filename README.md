@@ -919,7 +919,10 @@ useGeneratedKeys 옵션을 true로 설정하면 생성된 게시글의 PK가 par
 
 4-1-1. @Controller
 해당 클래스가 사용자의 요청과 응답을 처리(UI를 담당)하는 컨트롤러 클래스임을 의미합니다.
-  
+
+
+
+  
 4-1-2. @GetMapping
 과거의 스프링은 컨트롤러 메서드에 URI(주소)와 HTTP 요청 메서드를 매핑하기 위해 @RequestMapping을 이용해서 value에는 URI를, method에는 HTTP 요청 메서드를 지정(선언)해 주어야만 했습니다.
  
